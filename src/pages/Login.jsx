@@ -11,6 +11,8 @@ export default function Login({ setIsAuth }) {
     e.preventDefault()
     if (username === 'admin' && password === '1234') {
       setIsAuth(true)
+        localStorage.setItem("isAuth", "true"); // persist across reloads
+
       navigate('/home')
     } else {
       alert('Invalid credentials')
