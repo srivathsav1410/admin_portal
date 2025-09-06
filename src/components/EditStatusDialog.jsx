@@ -18,7 +18,7 @@ export default function EditStatusDialog({
 }) {
   console.log("EditStatusDialog props - open:", open, "currentStatus:", currentStatus);
   const [status, setStatus] = useState(currentStatus ?? "");
-console.log("Current Status in Dialog:", currentStatus);
+console.log("Current Status in:", currentStatus);
   useEffect(() => {
     console.log("Updating status in dialog to:", currentStatus);
     setStatus(currentStatus);
