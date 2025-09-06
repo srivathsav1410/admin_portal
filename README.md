@@ -27,3 +27,4 @@ npm run preview
 ## Notes
 - Data is mocked in-memory. Replace with your API calls in `src/pages/Home.jsx`.
 - Replace hardcoded login with real authentication when you connect your backend.
+"# admin_portal" 
