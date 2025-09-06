@@ -127,10 +127,7 @@ const handleSaveStatus = async (newStatus) => {
     }
 
     const data = await response.json();
-    console.log("✅ Status updated in backend:", data);
 
-    // optional: refresh the list from backend after update
-    // await fetchOrders(); // if you expose fetchOrders
   } catch (error) {
     console.error("❌ Error updating status:", error);
     alert("Failed to update status. Please try again.");

@@ -10,7 +10,6 @@ export default function App() {
     return localStorage.getItem("isAuth") === "true";
   });
 
-  // Whenever isAuth changes, persist it
   useEffect(() => {
     localStorage.setItem("isAuth", isAuth);
   }, [isAuth]);
@@ -21,14 +20,14 @@ export default function App() {
         <Route path="/" element={<Login setIsAuth={setIsAuth} />} />
         <Route
           path="/home"
-          element={
+           element={
             <ProtectedRoute isAuth={isAuth}>
               <Home />
             </ProtectedRoute>
           }
         />
         <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
+          </Routes>
     </Router>
   );
 }
