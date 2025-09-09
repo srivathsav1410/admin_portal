@@ -6,5 +6,6 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173
-  }
+  },
+  base: '/',   // 👈 important for Vercel + React Router
 })
