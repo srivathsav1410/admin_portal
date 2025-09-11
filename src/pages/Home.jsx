@@ -12,12 +12,52 @@ import { DataGrid } from "@mui/x-data-grid";
 import EditStatusDialog from "../components/EditStatusDialog.jsx";
 import OrderDetailsDialog from "../components/OrderDetailsDialog.jsx";
 import InfoIcon from '@mui/icons-material/Info';
+import { GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
 
 const ORDER_STATUSES = [
    "PickupStart", 
  "InProgress" , "Completed" ,
 "Cancelled" ,
 ];
+function CustomToolbar({ statusFilter }) {
+  const handleExport = async () => {
+    try {
+      const response = await fetch(
+        `https://reappbackend-c4cuaygbgehpdvfm.centralindia-01.azurewebsites.net/OrderRequest/export?status=${statusFilter}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "text/csv",
+          },
+        }
+      );
+
+      if (!response.ok) throw new Error("Failed to export");
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `orders_${statusFilter}.csv`; // file name with filter
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("❌ Export failed:", err);
+      alert("Export failed. Please try again.");
+    }
+  };
+
+  return (
+    <GridToolbarContainer>
+      <Button variant="outlined" onClick={handleExport}>
+        Export CSV
+      </Button>
+    </GridToolbarContainer>
+  );
+}
 
 export default function Home() {
   const [rows, setRows] = useState([]);
@@ -254,19 +294,23 @@ const handleSaveStatus = async (newStatus) => {
           p: 2,
           boxShadow: 1,
         }}
-      >
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          getRowId={(row) => row.orderId}
-          paginationMode="server"
-          rowCount={rowCount}
-          loading={loading}
-          paginationModel={paginationModel}
-          onPaginationModelChange={handlePaginationModelChange}
-                            pageSizeOptions={[5, 10, 20]}
-          disableRowSelectionOnClick
-        />
+      ><DataGrid
+  rows={rows}
+  columns={columns}
+  getRowId={(row) => row.orderId}
+  paginationMode="server"
+  rowCount={rowCount}
+  loading={loading}
+  paginationModel={paginationModel}
+  onPaginationModelChange={handlePaginationModelChange}
+  pageSizeOptions={[5, 10, 20]}
+  disableRowSelectionOnClick
+  slots={{
+    toolbar: () => <CustomToolbar statusFilter={statusFilter} />, // ✅ dynamic export
+  }}
+/>
+
+
       </Box>
 
    <EditStatusDialog
